@@ -81,7 +81,7 @@ async def commands_callbacc(_, cq: CallbackQuery):
 async def help_parser(name, keyboard=None):
     if not keyboard:
         keyboard = InlineKeyboardMarkup(
-            paginate_modules(0, HELPABLE, "Trợ giúp")
+            paginate_modules(0, HELPABLE, "help")
         )
     return (
         f"Xin chào {name}, tôi là bot anti 18+/spam. Tối có thể bảo vệ "
