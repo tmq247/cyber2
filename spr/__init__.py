@@ -1,5 +1,6 @@
 from os.path import exists
 from sqlite3 import connect
+import asyncio
 
 from aiohttp import ClientSession
 from pyrogram import Client
@@ -16,7 +17,13 @@ if exists("config.py"):
 else:
     from sample_config import *
 
-session = ClientSession()
+#session = ClientSession()
+
+async def create_session():
+    return ClientSession()
+
+loop = asyncio.get_event_loop()
+session = loop.run_until_complete(create_session())
 
 arq = ARQ(ARQ_API_URL, ARQ_API_KEY, session)
 
