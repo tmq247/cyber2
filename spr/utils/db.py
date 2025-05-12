@@ -421,19 +421,19 @@ def is_spam_enabled(chat_id: int) -> bool:
 
 def is_nsfw_enabled(chat_id: int) -> bool:
     """
-    CHECK IF NSFW DETECTION IS ENABLED IN A CHAT
+    KIỂM TRA XEM NSFW DETECTION CÓ ĐƯỢC BẬT TRONG CHAT KHÔNG
     """
     c = conn.cursor()
-    return bool(
-        c.execute(
-            """
-            SELECT nsfw_enabled
-            FROM chats
-            WHERE chat_id=?
-            """,
-            (chat_id,),
-        ).fetchone()[0]
-    )
+    result = c.execute(
+        """
+        SELECT nsfw_enabled
+        FROM chats
+        WHERE chat_id=?
+        """,
+        (chat_id,),
+    ).fetchone()
+
+    return bool(result[0]) if result else False  # Kiểm tra nếu kết quả không phải None
 
 
 def enable_nsfw(chat_id: int):
