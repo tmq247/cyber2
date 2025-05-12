@@ -13,7 +13,7 @@ from spr.utils.db import (add_chat, add_user, blacklist_chat,
     filters.command("blacklist") & filters.user(SUDOERS), group=3
 )
 async def blacklist_func(_, message: Message):
-    err = "Enter a user/chat's id and give a reason."
+    err = "Nhập ID của người dùng hoặc nhóm và cung cấp lý do."
     if len(message.command) < 3:
         return await message.reply_text(err)
     id = message.text.split(None, 2)[1]
@@ -38,16 +38,16 @@ async def blacklist_func(_, message: Message):
             add_chat(id)
         if is_chat_blacklisted(id):
             return await message.reply_text(
-                "This chat is already blacklisted."
+                "Cuộc trò chuyện này đã bị đưa vào danh sách đen."
             )
         blacklist_chat(id, reason)
         await message.reply_text(f"Blacklisted chat {chat.title}")
-        msg = f"**BLACKLIST EVENT**\n{await get_info(id)}"
+        msg = f"**Sự kiện danh sách đen**\n{await get_info(id)}"
         return await spr.send_message(SPAM_LOG_CHANNEL, text=msg)
 
     if id in SUDOERS:
         return await message.reply_text(
-            "This user is in SUDOERS and cannot be blacklisted."
+            "Người dùng này thuộc nhóm SUDOERS và không thể bị đưa vào danh sách đen."
         )
     try:
         user = await spr.get_users(id)
@@ -58,11 +58,11 @@ async def blacklist_func(_, message: Message):
         add_user(id)
     if is_user_blacklisted(id):
         return await message.reply_text(
-            "This user is already blacklisted."
+            "Người dùng này đã bị đưa vào danh sách đen."
         )
     blacklist_user(id, reason)
     await message.reply_text(f"Blacklisted user {user.mention}")
-    msg = f"**BLACKLIST EVENT**\n{await get_info(id)}"
+    msg = f"**Sự kiện danh sách đen**\n{await get_info(id)}"
     await spr.send_message(SPAM_LOG_CHANNEL, text=msg)
 
 
@@ -90,7 +90,7 @@ async def whitelist_func(_, message: Message):
             add_chat(id)
         if not is_chat_blacklisted(id):
             return await message.reply_text(
-                "This chat is already whitelisted."
+                "Cuộc trò chuyện này đã được đưa vào danh sách trắng."
             )
         whitelist_chat(id)
         return await message.reply_text(f"Whitelisted {chat.title}")
@@ -104,7 +104,7 @@ async def whitelist_func(_, message: Message):
         add_user(id)
     if not is_user_blacklisted(id):
         return await message.reply_text(
-            "This user is already whitelisted."
+            "Người dùng này đã được đưa vào danh sách trắng."
         )
     whitelist_user(id)
     return await message.reply_text(f"Whitelisted {user.mention}")
