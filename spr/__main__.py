@@ -46,21 +46,20 @@ async def main():
 @spr.on_message(filters.command(["help", "start"]), group=2)
 async def help_command(_, message: Message):
     if message.chat.type != ChatType.PRIVATE:
-        kb = ikb({"Help": f"https://t.me/{BOT_USERNAME}?start=help"})
-        return await message.reply("Pm Me For Help", reply_markup=kb)
+        kb = ikb({"Hướng dẫn": f"https://t.me/{BOT_USERNAME}?start=help"})
+        return await message.reply("Nhắn riêng cho tôi để xem hướng dẫn", reply_markup=kb)
     kb = ikb(
         {
-            "Help": "bot_commands",
-            "Repo": "https://github.com/TheHamkerCat/SpamProtectionRobot",
-            "Add Me To Your Group": f"https://t.me/{BOT_USERNAME}?startgroup=new",
-            "Support Chat (for now)": "https://t.me/WBBSupport",
+            "Hướng dẫn": "bot_commands",
+            "Thêm tôi vào nhóm của bạn": f"https://t.me/{BOT_USERNAME}?startgroup=new",
+            "Nhóm hỗ trợ": "https://t.me/muoimuoimusicbot",
         }
     )
     mention = message.from_user.mention
     await message.reply_photo(
         "https://hamker.me/logo_3.png",
-        caption=f"Hi {mention}, I'm SpamProtectionRobot,"
-        + " Choose An Option From Below.",
+        caption=f"Chào {mention}, tôi là bot anti 18+/spam,"
+        + " Chọn một tùy chọn bên dưới.",
         reply_markup=kb,
     )
 
@@ -82,12 +81,12 @@ async def commands_callbacc(_, cq: CallbackQuery):
 async def help_parser(name, keyboard=None):
     if not keyboard:
         keyboard = InlineKeyboardMarkup(
-            paginate_modules(0, HELPABLE, "help")
+            paginate_modules(0, HELPABLE, "Trợ giúp")
         )
     return (
-        f"Hello {name}, I'm SpamProtectionRobot, I can protect "
-        + "your group from Spam and NSFW media using "
-        + "machine learning. Choose an option from below.",
+        f"Xin chào {name}, tôi là bot anti 18+/spam. Tối có thể bảo vệ "
+        + "nhóm của bạn khỏi nội dung 18+ và spam bằng cách dùng "
+        + "máy học. Hãy chọn một trong những tùy chọn bên dưới.",
         keyboard,
     )
 
@@ -101,15 +100,15 @@ async def help_button(client, query: CallbackQuery):
     create_match = re.match(r"help_create", query.data)
     u = query.from_user.mention
     top_text = (
-        f"Hello {u}, I'm SpamProtectionRobot, I can protect "
-        + "your group from Spam and NSFW media using "
-        + "machine learning. Choose an option from below."
+        f"Xin chào {u}, tôi là bot anti 18+/spam. Tối có thể bảo vệ "
+        + "nhóm của bạn khỏi nội dung 18+ và spam bằng cách dùng "
+        + "máy học. Hãy chọn một trong những tùy chọn bên dưới."
     )
     if mod_match:
         module = mod_match.group(1)
         text = (
             "{} **{}**:\n".format(
-                "Here is the help for", HELPABLE[module].__MODULE__
+                "Đây là hướng dẫn cho", HELPABLE[module].__MODULE__
             )
             + HELPABLE[module].__HELP__
         )
@@ -170,7 +169,7 @@ async def help_button(client, query: CallbackQuery):
 
 @spr.on_message(filters.command("runs"), group=3)
 async def runs_func(_, message: Message):
-    await message.reply("What am i? Rose?")
+    await message.reply("Tôi là gì? Rose?")
 
 
 if __name__ == "__main__":
