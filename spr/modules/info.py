@@ -17,8 +17,6 @@ __HELP__ = """
 
 /info [CHAT_ID/Username|USER_ID/Username]
 
-or you can use inline mode >>
-@SpamProtectionRobot [CHAT_ID/Username|USER_ID/Username]
 """
 
 
@@ -35,21 +33,23 @@ async def get_user_info(user):
     if blacklisted:
         reason, time = get_blacklist_event(user.id)
     data = f"""
-**ID:** {user.id}
-**DC:** {user.dc_id}
-**Username:** {user.username}
-**Mention: ** {user.mention("Link")}
+**Thông tin người dùng:**  
+- **ID:** {user.id}  
+- **Trung tâm dữ liệu (DC):** {user.dc_id}  
+- **Tên người dùng:** {user.username}  
+- **Nhắc đến:** {user.mention("Liên kết")}  
 
-**Is Sudo:** {user.id in SUDOERS}
-**Trust:** {trust}
-**Spammer:** {True if trust < 50 else False}
-**Reputation:** {get_reputation(user.id)}
-**NSFW Count:** {get_nsfw_count(user.id)}
-**Potential Spammer:** {True if trust < 70 else False}
-**Blacklisted:** {blacklisted}
+**Trạng thái:**  
+- **Là Sudo:** {user.id in SUDOERS}  
+- **Độ tin cậy:** {trust}  
+- **Người gửi spam:** {True if trust < 50 else False}  
+- **Danh tiếng:** {get_reputation(user.id)}  
+- **Số lần đăng NSFW:** {get_nsfw_count(user.id)}  
+- **Có khả năng là spammer:** {True if trust < 70 else False}  
+- **Bị đưa vào danh sách đen:** {blacklisted}  
 """
     data += (
-        f"**Blacklist Reason:** {reason} | {ctime(time)}"
+        f"**Lý do danh sách đen:** {reason} | {ctime(time)}"
         if reason
         else ""
     )
@@ -68,16 +68,17 @@ async def get_chat_info(chat):
     if blacklisted:
         reason, time = get_blacklist_event(chat.id)
     data = f"""
-**ID:** {chat.id}
-**Username:** {chat.username}
-**Type:** {chat.type}
-**Members:** {chat.members_count}
-**Scam:** {chat.is_scam}
-**Restricted:** {chat.is_restricted}
-**Blacklisted:** {blacklisted}
+**Thông tin cuộc trò chuyện:**  
+- **ID:** {chat.id}  
+- **Tên người dùng:** {chat.username}  
+- **Loại:** {chat.type}  
+- **Số thành viên:** {chat.members_count}  
+- **Lừa đảo:** {chat.is_scam}  
+- **Bị hạn chế:** {chat.is_restricted}  
+- **Bị đưa vào danh sách đen:** {blacklisted}  
 """
     data += (
-        f"**Blacklist Reason:** {reason} | {ctime(time)}"
+        f"**Lý do danh sách đen:** {reason} | {ctime(time)}"
         if reason
         else ""
     )
@@ -104,9 +105,9 @@ async def info_func(_, message: Message):
     elif len(message.command) == 2:
         entity = message.text.split(None, 1)[1]
     else:
-        return await message.reply_text("Read the help menu")
+        return await message.reply_text("Đọc menu trợ giúp")
     entity = await get_info(entity)
-    entity = entity or "I haven't seen this chat/user."
+    entity = entity or "Tôi chưa thấy cuộc trò chuyện/người dùng này."
     await message.reply_text(entity)
 
 
@@ -115,7 +116,7 @@ async def inline_info_func(_, query: InlineQuery):
     query_ = query.query.strip()
     entity = await get_info(query_)
     if not entity:
-        err = "I haven't seen this user/chat."
+        err = "Tôi chưa thấy người dùng/cuộc trò chuyện này."
         results = [
             InlineQueryResultArticle(
                 err,
