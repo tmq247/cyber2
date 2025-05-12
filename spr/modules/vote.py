@@ -50,7 +50,7 @@ async def downvote_cb_func(_, cq: CallbackQuery):
 
     if data == "spam":
         if user_voted(mid, user_id):
-            return await cq.answer("Bạn đã bỏ phiếu rồi.".")
+            return await cq.answer("Bạn đã bỏ phiếu rồi.")
         downvote(mid, user_id)
         kb = cq.message.reply_markup.inline_keyboard
         upvotes = clean(kb[0][0])
