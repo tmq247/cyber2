@@ -13,8 +13,8 @@ __MODULE__ = "Manage"
 __HELP__ = """
 - **/antinsfw [ENABLE|DISABLE]** – Bật hoặc tắt tính năng phát hiện nội dung NSFW.
 - **/antispam [ENABLE|DISABLE]** – Bật hoặc tắt tính năng phát hiện spam.
-- **/nsfwscan** – Phân loại nội dung media để kiểm tra xem có phải NSFW không.
-- **/spamscan** – Dự đoán mức độ spam của tin nhắn được phản hồi.
+- **/nsfw** – Phân loại nội dung media để kiểm tra xem có phải NSFW không.
+- **/spam** – Dự đoán mức độ spam của tin nhắn được phản hồi.
 """
 
 
@@ -90,7 +90,7 @@ async def spam_toggle_func(_, message: Message):
         )
 
 
-@spr.on_message(filters.command("nsfwscan"), group=3)
+@spr.on_message(filters.command("nsfw"), group=3)
 async def nsfw_scan_command(_, message: Message):
     err = "Trả lời bằng hình ảnh/tài liệu/nhãn dán/hoạt ảnh để quét nó."
     if not message.reply_to_message:
@@ -131,7 +131,7 @@ async def nsfw_scan_command(_, message: Message):
     )
 
 
-@spr.on_message(filters.command("spamscan"), group=3)
+@spr.on_message(filters.command("spam"), group=3)
 async def scanNLP(_, message: Message):
     if not message.reply_to_message:
         return await message.reply("Trả lời một tin nhắn để quét nó.")
