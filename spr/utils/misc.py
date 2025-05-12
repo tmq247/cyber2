@@ -202,7 +202,7 @@ def paginate_modules(page_n, module_dict, prefix, chat=None):
     return pairs
 
 
-""" TO GET UPVOTES/DOWNVOTES FROM MESSAGE """
+""" Để nhận lượt upvote/downvote từ tin nhắn """
 clean = lambda x: int(
     x.text.split()[1].replace("(", "").replace(")", "")
 )
