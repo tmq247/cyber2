@@ -16,7 +16,7 @@ async def upvote_cb_func(_, cq: CallbackQuery):
     mid = cq.message.message_id
     if data == "spam":
         if user_voted(mid, user_id):
-            return await cq.answer("You've already casted your vote.")
+            return await cq.answer("Bạn đã bỏ phiếu rồi.")
         upvote(mid, user_id)
         kb = cq.message.reply_markup.inline_keyboard
         upvotes = clean(kb[0][0])
@@ -25,8 +25,8 @@ async def upvote_cb_func(_, cq: CallbackQuery):
 
         keyb = ikb(
             {
-                f"Correct ({upvotes + 1})": "upvote_spam",
-                f"Incorrect ({downvotes})": "downvote_spam",
+                f"Đúng ({upvotes + 1})": "upvote_spam",
+                f"Sai ({downvotes})": "downvote_spam",
                 "Chat": link,
             },
             2
@@ -50,7 +50,7 @@ async def downvote_cb_func(_, cq: CallbackQuery):
 
     if data == "spam":
         if user_voted(mid, user_id):
-            return await cq.answer("You've already casted your vote.")
+            return await cq.answer("Bạn đã bỏ phiếu rồi.".")
         downvote(mid, user_id)
         kb = cq.message.reply_markup.inline_keyboard
         upvotes = clean(kb[0][0])
@@ -58,8 +58,8 @@ async def downvote_cb_func(_, cq: CallbackQuery):
         link = kb[1][0].url
         keyb = ikb(
             {
-                f"Correct ({upvotes})": "upvote_spam",
-                f"Incorrect ({downvotes + 1})": "downvote_spam",
+                f"Đúng ({upvotes})": "upvote_spam",
+                f"Sai ({downvotes + 1})": "downvote_spam",
                 "Chat": link,
             },
             2
