@@ -20,17 +20,17 @@ async def get_user_info(message):
     if blacklisted:
         reason, time = get_blacklist_event(user.id)
     data = f"""
-**User:**
-    **Username:** {user_}
-    **Trust:** {trust}
-    **Spammer:** {True if trust < 50 else False}
-    **Reputation:** {get_reputation(user.id)}
-    **NSFW Count:** {get_nsfw_count(user.id)}
-    **Potential Spammer:** {True if trust < 70 else False}
-    **Blacklisted:** {is_user_blacklisted(user.id)}
+**Người dùng:**  
+   **Tên người dùng:** {user_}  
+   **Độ tin cậy:** {trust}  
+   **Có phải spammer:** {True if trust < 50 else False}  
+   **Danh tiếng:** {get_reputation(user.id)}  
+   **Số lần gửi NSFW:** {get_nsfw_count(user.id)}  
+   **Có thể là spammer:** {True if trust < 70 else False}  
+   **Bị đưa vào danh sách đen:** {is_user_blacklisted(user.id)}  
 """
     data += (
-        f"    **Blacklist Reason:** {reason} | {ctime(time)}"
+        f"    **Lý do bị đưa vào danh sách đen:** {reason} | {ctime(time)}"
         if reason
         else ""
     )
@@ -43,8 +43,8 @@ async def delete_get_info(message: Message):
     except (ChatAdminRequired, UserAdminInvalid):
         try:
             return await message.reply_text(
-                "I don't have enough permission to delete "
-                + "this message which is Flagged as Spam."
+                "Tôi không đủ quyền để xóa tin nhắn này "
+                + "tin nhắn bị đánh dấu là Spam."
             )
         except ChatWriteForbidden:
             return await spr.leave_chat(message.chat.id)
@@ -58,21 +58,21 @@ async def delete_nsfw_notify(
     await message.copy(
         NSFW_LOG_CHANNEL,
         reply_markup=ikb(
-            {"Correct": "upvote_nsfw", "Incorrect": "downvote_nsfw"}
+            {"Đúng": "upvote_nsfw", "Sai": "downvote_nsfw"}
         ),
     )
     info = await delete_get_info(message)
     if not info:
         return
     msg = f"""
-🚨 **NSFW ALERT**  🚔
+🚨 **Cảnh báo NSFW**  🚔
 {info}
-**Prediction:**
-    **Safe:** `{result.neutral} %`
+**Dự đoán:**
+    **An toàn:** `{result.neutral} %`
     **Porn:** `{result.porn} %`
     **Adult:** `{result.sexy} %`
     **Hentai:** `{result.hentai} %`
-    **Drawings:** `{result.drawings} %`
+    **Hình vẽ:** `{result.drawings} %`
 """
     await spr.send_message(message.chat.id, text=msg)
     increment_nsfw_count(message.from_user.id)
@@ -86,25 +86,25 @@ async def delete_spam_notify(
     if not info:
         return
     msg = f"""
-🚨 **SPAM ALERT**  🚔
+🚨 **Cảnh báo SPAM**  🚔
 {info}
-**Spam Probability:** {spam_probability} %
+**Xác xuất SPAM:** {spam_probability} %
 
-__Message has been deleted__
+__Tin nhắn đã bị xóa__
 """
     content = message.text or message.caption
     content = content[:400] + "..."
     report = f"""
-**SPAM DETECTION**
+**Phát hiện SPAM**
 {info}
-**Content:**
+**Nội dung:**
 {content}
     """
 
     keyb = ikb(
         {
-            "Correct (0)": "upvote_spam",
-            "Incorrect (0)": "downvote_spam",
+            "Đúng (0)": "upvote_spam",
+            "Sai (0)": "downvote_spam",
             "Chat": "https://t.me/" + (message.chat.username or "SpamProtectionLog/93"),
         },
         2
@@ -116,7 +116,7 @@ __Message has been deleted__
         disable_web_page_preview=True,
     )
 
-    keyb = ikb({"View Message": m.link})
+    keyb = ikb({"Xem tin nhắn": m.link})
     await spr.send_message(
         message.chat.id, text=msg, reply_markup=keyb
     )
@@ -130,16 +130,16 @@ async def kick_user_notify(message: Message):
     except (ChatAdminRequired, UserAdminInvalid):
         try:
             return await message.reply_text(
-                "I don't have enough permission to ban "
-                + "this user who is Blacklisted and Flagged as Spammer."
+                "Tôi không có đủ quyền để ban "
+                + "người dùng này đã bị đưa vào danh sách đen và bị đánh dấu là spammer."
             )
         except ChatWriteForbidden:
             return await spr.leave_chat(message.chat.id)
     info = await get_user_info(message)
     msg = f"""
-🚨 **SPAMMER ALERT**  🚔
+🚨 **Cảnh báo SPAMMER**  🚔
 {info}
 
-__User has been banned__
+__Người này đã bị ban__
 """
     await spr.send_message(message.chat.id, msg)
